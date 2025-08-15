@@ -1,13 +1,12 @@
 package com.reliaquest.api.service;
 
-import com.reliaquest.api.Model.*;
+import com.reliaquest.api.Model.Employee;
 import com.reliaquest.api.Model.request.DeleteEmployeeRequest;
 import com.reliaquest.api.Model.request.EmployeeRequest;
 import com.reliaquest.api.Model.response.DeleteEmployeeResponse;
 import com.reliaquest.api.Model.response.GetEmployeeResponse;
 import com.reliaquest.api.Model.response.GetEmployeesResponse;
 import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -60,7 +59,9 @@ public class EmployeeService {
         String url = "http://localhost:8112/api/v1/employee";
         try {
             HttpEntity<DeleteEmployeeRequest> requestEntity = new HttpEntity<>(deleteEmployee);
-            return restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, DeleteEmployeeResponse.class).getBody();
+            return restTemplate
+                    .exchange(url, HttpMethod.DELETE, requestEntity, DeleteEmployeeResponse.class)
+                    .getBody();
         } catch (RestClientException e) {
             log.error("Error in deleteEmployeeByName: {}", e.getMessage());
             return null;

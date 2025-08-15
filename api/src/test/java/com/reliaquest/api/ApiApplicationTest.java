@@ -3,16 +3,16 @@ package com.reliaquest.api;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reliaquest.api.Model.Employee;
 import com.reliaquest.api.Model.request.DeleteEmployeeRequest;
 import com.reliaquest.api.Model.request.EmployeeRequest;
-import com.reliaquest.api.service.EmployeeService;
 import com.reliaquest.api.Model.response.DeleteEmployeeResponse;
 import com.reliaquest.api.Model.response.GetEmployeeResponse;
+import com.reliaquest.api.service.EmployeeService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -41,8 +41,7 @@ class ApiApplicationTest {
     void getAllEmployees() throws Exception {
         List<Employee> employees = Arrays.asList(
                 new Employee(UUID.randomUUID(), "John Doe", 60000, 30, "IT", "john.doe@example.com"),
-                new Employee(UUID.randomUUID(), "Jane Smith", 75000, 35, "HR", "jane.smith@example.com")
-        );
+                new Employee(UUID.randomUUID(), "Jane Smith", 75000, 35, "HR", "jane.smith@example.com"));
         when(employeeService.getEmployees()).thenReturn(employees);
 
         mockMvc.perform(get("/"))
@@ -59,8 +58,7 @@ class ApiApplicationTest {
         List<Employee> employees = Arrays.asList(
                 new Employee(UUID.randomUUID(), "John Doe", 60000, 30, "IT", "john.doe@example.com"),
                 new Employee(UUID.randomUUID(), "Jane Smith", 75000, 35, "HR", "jane.smith@example.com"),
-                new Employee(UUID.randomUUID(), "Doe something", 80000, 40, "Sales", "doe.something@example.com")
-        );
+                new Employee(UUID.randomUUID(), "Doe something", 80000, 40, "Sales", "doe.something@example.com"));
         when(employeeService.getEmployees()).thenReturn(employees);
 
         mockMvc.perform(get("/search/Doe"))
@@ -89,8 +87,7 @@ class ApiApplicationTest {
         List<Employee> employees = Arrays.asList(
                 new Employee(UUID.randomUUID(), "John Doe", 60000, 30, "IT", "john.doe@example.com"),
                 new Employee(UUID.randomUUID(), "Jane Smith", 75000, 35, "HR", "jane.smith@example.com"),
-                new Employee(UUID.randomUUID(), "Bob Johnson", 80000, 40, "Sales", "bob.johnson@example.com")
-        );
+                new Employee(UUID.randomUUID(), "Bob Johnson", 80000, 40, "Sales", "bob.johnson@example.com"));
         when(employeeService.getEmployees()).thenReturn(employees);
 
         mockMvc.perform(get("/highestSalary"))
@@ -112,8 +109,7 @@ class ApiApplicationTest {
                 new Employee(UUID.randomUUID(), "Employee8", 30000, 42, "Sales", "e8@example.com"),
                 new Employee(UUID.randomUUID(), "Employee9", 20000, 45, "Marketing", "e9@example.com"),
                 new Employee(UUID.randomUUID(), "Employee10", 10000, 48, "Finance", "e10@example.com"),
-                new Employee(UUID.randomUUID(), "Employee11", 5000, 50, "IT", "e11@example.com")
-        );
+                new Employee(UUID.randomUUID(), "Employee11", 5000, 50, "IT", "e11@example.com"));
         when(employeeService.getEmployees()).thenReturn(employees);
 
         mockMvc.perform(get("/topTenHighestEarningEmployeeNames"))
@@ -129,8 +125,10 @@ class ApiApplicationTest {
     void createEmployee() throws Exception {
         EmployeeRequest newEmployeeRequest = new EmployeeRequest("New Employee", 55000, 25, "New Department");
         UUID createdEmployeeId = UUID.randomUUID();
-        Employee createdEmployee = new Employee(createdEmployeeId, "New Employee", 55000, 25, "New Department", "new.employee@example.com");
-        when(employeeService.createEmployee(any(EmployeeRequest.class))).thenReturn(new GetEmployeeResponse(createdEmployee, "Success"));
+        Employee createdEmployee = new Employee(
+                createdEmployeeId, "New Employee", 55000, 25, "New Department", "new.employee@example.com");
+        when(employeeService.createEmployee(any(EmployeeRequest.class)))
+                .thenReturn(new GetEmployeeResponse(createdEmployee, "Success"));
 
         mockMvc.perform(post("/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -143,9 +141,11 @@ class ApiApplicationTest {
     @Test
     void deleteEmployeeById() throws Exception {
         UUID employeeToDeleteId = UUID.randomUUID();
-        Employee employeeToDelete = new Employee(employeeToDeleteId, "John Doe", 60000, 30, "IT", "john.doe@example.com");
+        Employee employeeToDelete =
+                new Employee(employeeToDeleteId, "John Doe", 60000, 30, "IT", "john.doe@example.com");
         when(employeeService.getEmployeesById("1")).thenReturn(employeeToDelete);
-        when(employeeService.deleteEmployeeByName(any(DeleteEmployeeRequest.class))).thenReturn(new DeleteEmployeeResponse(true, "Success"));
+        when(employeeService.deleteEmployeeByName(any(DeleteEmployeeRequest.class)))
+                .thenReturn(new DeleteEmployeeResponse(true, "Success"));
 
         mockMvc.perform(delete("/1"))
                 .andDo(print())
